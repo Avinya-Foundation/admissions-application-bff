@@ -1,17 +1,19 @@
 import ballerina/http;
+import ballerina/graphql;
+
+final GlobalDataClient globalDataClient = check new ("https://3a907137-52a3-4196-9e0d-22d054ea5789-dev.e1-us-east-azure.choreoapis.dev/mhbw/global-data-graphql-api/1.0.0/graphql");
+
 
 # A service representing a network-accessible API
 # bound to port `9090`.
 service / on new http:Listener(9090) {
 
     # A resource for generating greetings
-    # + name - the input string name
-    # + return - string name with hello message or error
-    resource function get greeting(string name) returns string|error {
-        // Send a response back to the caller.
-        if name is "" {
-            return error("name should not be empty!");
-        }
-        return "Hello, " + name;
+    # + person - the input Person record
+    # + return - Student record with associated data
+    resource function post student_applicant(@http:Payload Person person) returns CreateStudentApplicantResponse|error {
+        CreateStudentApplicantResponse|graphql:ClientError createStudentApplicantResponse = globalDataClient->createStudentApplicant(person);
+        return createStudentApplicantResponse;
     }
+    
 }
