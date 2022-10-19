@@ -21,9 +21,26 @@ service / on new http:Listener(9090) {
         return createStudentApplicantConsentResponse;
     }
 
-    resource function get applicant_consent/[string name]() returns GetOrganizationVacanciesResponse|error {
+    resource function get organization_vacancies/[string name]() returns GetOrganizationVacanciesResponse|error {
         GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
         return getOrganizationVacanciesResponse;
+    }
+
+    resource function get student_vacancies/[string name]() returns json|error {
+        GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
+        // json var = <json>getOrganizationVacanciesResponse;
+        if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
+             map<json> organizations = check getOrganizationVacanciesResponse.ensureType();
+             foreach var organization in organizations {
+                map<json> child_orgs = check organization.child_organizations.ensureType();
+                foreach var child_org in child_orgs {
+                    map<json> vacancies = check child_org.vacancies.ensureType();
+                    return vacancies.toJson();
+                }
+             } 
+        } else {
+            return error("Error: vacancies not found");
+        }
     }
     
 }
