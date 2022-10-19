@@ -34,6 +34,7 @@ service / on new http:Listener(9090) {
              map<json> organizations = check getOrganizationVacanciesResponse.ensureType();
              foreach var organization in organizations {
                 log:printError(organization.toString());
+                log:printError(organizations.length().toString());
                 map<json>|error child_orgs = organization.child_organizations.ensureType();
                 if (child_orgs is map<json>) {
                     foreach var child_org in child_orgs {
@@ -45,9 +46,13 @@ service / on new http:Listener(9090) {
                                 log:printError(vacancy.toString());
                             }
                             return vacancies.toJson();
+                        } else {
+                            log:printError("Error vacancies: " + vacancies.toString());
                         }
                         
                     }
+                } else {
+                    log:printError("Error child_orgs: " + child_orgs.toString());
                 }
              } 
         } else {
