@@ -15,5 +15,15 @@ service / on new http:Listener(9090) {
         CreateStudentApplicantResponse|graphql:ClientError createStudentApplicantResponse = globalDataClient->createStudentApplicant(person);
         return createStudentApplicantResponse;
     }
+
+    resource function post applicant_consent(@http:Payload ApplicantConsent applicantConsent) returns CreateStudentApplicantConsentResponse|error {
+        CreateStudentApplicantConsentResponse|graphql:ClientError createStudentApplicantConsentResponse = globalDataClient->createStudentApplicantConsent(applicantConsent);
+        return createStudentApplicantConsentResponse;
+    }
+
+    resource function get applicant_consent/[string name]() returns GetOrganizationVacanciesResponse|error {
+        GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
+        return getOrganizationVacanciesResponse;
+    }
     
 }
