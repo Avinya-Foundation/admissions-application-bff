@@ -34,11 +34,20 @@ service / on new http:Listener(9090) {
              map<json> organizations = check getOrganizationVacanciesResponse.ensureType();
              foreach var organization in organizations {
                 log:printError(organization.toString());
-                map<json> child_orgs = check organization.child_organizations.ensureType();
-                log:printDebug(child_orgs.toString());
-                foreach var child_org in child_orgs {
-                    map<json> vacancies = check child_org.vacancies.ensureType();
-                    return vacancies.toJson();
+                map<json>|error child_orgs = organization.child_organizations.ensureType();
+                if (child_orgs is map<json>) {
+                    foreach var child_org in child_orgs {
+                        log:printError(child_org.toString());
+                    
+                        map<json>|error vacancies =  child_org.vacancies.ensureType();
+                        if (vacancies is map<json>) {
+                            foreach var vacancy in vacancies {
+                                log:printError(vacancy.toString());
+                            }
+                            return vacancies.toJson();
+                        }
+                        
+                    }
                 }
              } 
         } else {
