@@ -4,9 +4,28 @@ public type Address record {
     int? phone?;
     string? name_si?;
     int? id?;
-    string record_type?;
+    string? record_type?;
     int city_id?;
     string name_en?;
+};
+
+public type ApplicantConsent record {
+    string? date_of_birth?;
+    string? created?;
+    int? avinya_type_id?;
+    boolean? agree_terms_consent?;
+    boolean? done_ol?;
+    int? application_id?;
+    int? ol_year?;
+    string? record_type?;
+    boolean? information_correct_consent?;
+    int? phone?;
+    int? organization_id?;
+    string? name?;
+    int? id?;
+    int? distance_to_school?;
+    string? email?;
+    int? person_id?;
 };
 
 public type Organization record {
@@ -18,27 +37,27 @@ public type Organization record {
     string? name_si?;
     int? avinya_type?;
     int? id?;
-    string record_type?;
+    string? record_type?;
     string name_en?;
 };
 
 public type Person record {
-    string record_type?;
-    string? preferred_name?;
-    string? full_name?;
+    int? permanent_address_id?;
     string? notes?;
     string? date_of_birth?;
     string? sex?;
     int? avinya_type_id?;
     string? passport_no?;
-    int? permanent_address_id?;
+    string? record_type?;
     int? mailing_address_id?;
+    string? full_name?;
     string? nic_no?;
     string? id_no?;
     int? phone?;
     int? organization_id?;
     int? id?;
     string? asgardeo_id?;
+    string? preferred_name?;
     string? email?;
 };
 
@@ -82,4 +101,63 @@ public type CreateStudentApplicantResponse record {|
         string? nic_no;
         string? id_no;
     |}? add_student_applicant;
+|};
+
+public type CreateStudentApplicantConsentResponse record {|
+    map<json?> __extensions?;
+    record {|
+        string? name;
+        string? date_of_birth;
+        boolean? done_ol;
+        int? ol_year;
+        int? distance_to_school;
+        int? phone;
+        string? email;
+        boolean? information_correct_consent;
+        boolean? agree_terms_consent;
+    |}? add_student_applicant_consent;
+|};
+
+public type GetOrganizationVacanciesResponse record {|
+    map<json?> __extensions?;
+    record {|record {|
+            record {|
+                string name_en;
+            |} name;
+            record {|
+                string street_address;
+            |}? address;
+            record {|
+                string? name;
+                boolean active;
+                string global_type;
+                string? foundation_type;
+                string? focus;
+                int? level;
+            |}? avinya_type;
+            int? phone;
+            record {|record {|
+                    string name_en;
+                |} name; record {|
+                    string? name;
+                    string? description;
+                    int? head_count;
+                    record {|
+                        string? prompt;
+                        string? description;
+                        string? difficulty;
+                        string? evalualtion_type;
+                        int? rating_out_of;
+                        string? expected_answer;
+                    |}[]? evaluation_criteria;
+                |}[]? vacancies;|}[]? child_organizations;
+            record {|record {|
+                    string name_en;
+                |} name;|}[]? parent_organizations;
+            record {|
+                string? name;
+                string? description;
+                int? head_count;
+            |}[]? vacancies;
+        |}[]? organizations;|}? organization_structure;
 |};

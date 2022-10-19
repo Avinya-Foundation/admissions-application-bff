@@ -1,5 +1,7 @@
 import ballerina/graphql;
 
+public configurable string global_data_api_key = ?;
+
 type OperationResponse record {| anydata...; |}|record {| anydata...; |}[]|boolean|string|int|float|();
 
 type DataResponse record {|
