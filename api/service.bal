@@ -30,9 +30,10 @@ service / on new http:Listener(9090) {
         GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
         // json var = <json>getOrganizationVacanciesResponse;
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
-             map<json> organizations = check getOrganizationVacanciesResponse.ensureType();
-             foreach var organization in organizations {
-                map<json> child_orgs = check organization.child_organizations.ensureType();
+             map<json> organization_structures = check getOrganizationVacanciesResponse.ensureType();
+             foreach var organization_structure in organization_structures {
+                map<json> child_orgs = 
+                    check organization_structure.organization_structure.organizations.child_organizations.ensureType();
                 foreach var child_org in child_orgs {
                     map<json> vacancies = check child_org.vacancies.ensureType();
                     return vacancies.toJson();
