@@ -33,7 +33,7 @@ service / on new http:Listener(9090) {
              map<json> organization_structures = check getOrganizationVacanciesResponse.ensureType();
              foreach var organization_structure in organization_structures {
                 map<json> organizations = 
-                    check organization_structure.organization_structure.organizations.ensureType();
+                    check organization_structure.organizations.ensureType();
                 foreach var organization in organizations {
                     map<json>|error child_orgs = organization.child_organizations.ensureType();
                     if(child_orgs is json) {
