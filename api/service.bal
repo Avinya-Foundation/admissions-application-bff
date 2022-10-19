@@ -1,4 +1,5 @@
 import ballerina/http;
+import ballerina/log;
 import ballerina/graphql;
 
 final GlobalDataClient globalDataClient = check new ("https://3a907137-52a3-4196-9e0d-22d054ea5789-dev.e1-us-east-azure.choreoapis.dev/mhbw/global-data-graphql-api/1.0.0/graphql");
@@ -30,21 +31,13 @@ service / on new http:Listener(9090) {
         GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
         // json var = <json>getOrganizationVacanciesResponse;
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
-             map<json> organization_structures = check getOrganizationVacanciesResponse.ensureType();
-             foreach var organization_structure in organization_structures {
-                map<json> organizations = 
-                    check organization_structure.organizations.ensureType();
-                foreach var organization in organizations {
-                    map<json>|error child_orgs = organization.child_organizations.ensureType();
-                    if(child_orgs is json) {
-
-                        foreach var child_org in child_orgs {
-                            map<json>|error vacancies =  child_org.vacancies.ensureType();
-                            if(vacancies is json) {
-                                return vacancies;
-                            }
-                        }
-                    }
+             map<json> organizations = check getOrganizationVacanciesResponse.ensureType();
+             foreach var organization in organizations {
+                map<json> child_orgs = check organization.child_organizations.ensureType();
+                log:printDebug(child_orgs.toString());
+                foreach var child_org in child_orgs {
+                    map<json> vacancies = check child_org.vacancies.ensureType();
+                    return vacancies.toJson();
                 }
              } 
         } else {
