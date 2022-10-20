@@ -62,35 +62,32 @@ public type Person record {
 };
 
 public type EvaluationCriteria record {|
-    readonly string? record_type = "evaluation_criteria";
     int id?;
-    string? prompt;
-    string? description;
-    string? expected_answer;
-    string? evalualtion_type;
-    string? difficulty;
-    int? rating_out_of;
-    EvaluationCriteriaAnswerOption[]? answer_options;
+    string? prompt?;
+    string? description?;
+    string? expected_answer?;
+    string? evalualtion_type?;
+    string? difficulty?;
+    int? rating_out_of?;
+    EvaluationCriteriaAnswerOption[]? answer_options?;
 |};
 
 public type EvaluationCriteriaAnswerOption record {|
-    readonly string? record_type = "evaluation_criteria_answer_option";
     int id?;
-    int? evaluation_criteria_id;
-    string? answer;
-    boolean? expected_answer;
+    int? evaluation_criteria_id?;
+    string? answer?;
+    boolean? expected_answer?;
 |};
 
 public type Vacancy record {|
-    readonly string? record_type = "vacancy";
     int id?;
-    string? name;
-    string? description;
-    int? organization_id;
-    int? avinya_type_id;
-    int? evaluation_cycle_id;
-    int? head_count;
-    EvaluationCriteria[]? evaluation_criteria;
+    string? name?;
+    string? description?;
+    int? organization_id?;
+    int? avinya_type_id?;
+    int? evaluation_cycle_id?;
+    int? head_count?;
+    EvaluationCriteria[]? evaluation_criteria?;
 |};
 
 public type CreateStudentApplicantResponse record {|
