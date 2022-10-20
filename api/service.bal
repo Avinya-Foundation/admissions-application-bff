@@ -33,9 +33,9 @@ service / on new http:Listener(9090) {
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
              map<json> org_structure = check getOrganizationVacanciesResponse.toJson().ensureType();
              foreach var organizations in org_structure {
-                map<json>|error org_data = organizations.organizations.ensureType();
+                json[]|error org_data = organizations.organizations.ensureType();
                 
-                if(org_data is map<json>) {
+                if(org_data is json[]) {
                     log:printError(org_data.length().toString());
                     log:printError(org_data.toString());
                     foreach var data in org_data {
