@@ -31,7 +31,7 @@ service / on new http:Listener(9090) {
         GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
         // json var = <json>getOrganizationVacanciesResponse;
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
-             map<json> org_structure = check getOrganizationVacanciesResponse.ensureType();
+             map<json> org_structure = check getOrganizationVacanciesResponse.toJson().ensureType();
              foreach var organizations in org_structure {
                 map<json>|error org_data = organizations.organizations.ensureType();
                 
