@@ -33,32 +33,39 @@ service / on new http:Listener(9090) {
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
              map<json> org_structure = check getOrganizationVacanciesResponse.ensureType();
              foreach var organizations in org_structure {
-                map<json> org_data = check organizations.organizations.ensureType();
-                log:printError(org_data.length().toString());
-                log:printError(org_data.toString());
-                foreach var data in org_data {
-                    log:printError(data.toString());
-                    map<json>|error child_orgs = data.child_organizations.ensureType();
-                    if (child_orgs is map<json>) {
-                        foreach var child_org in child_orgs {
-                            log:printError(child_org.toString());
-                        
-                            map<json>|error vacancies =  child_org.vacancies.ensureType();
-                            if (vacancies is map<json>) {
-                                foreach var vacancy in vacancies {
-                                    log:printError(vacancy.toString());
-                                }
-                                return vacancies.toJson();
-                            } else {
-                                log:printError("Error vacancies: " + vacancies.toString());
-                            }
+                map<json>|error org_data = organizations.organizations.ensureType();
+                
+                if(org_data is map<json>) {
+                    log:printError(org_data.length().toString());
+                    log:printError(org_data.toString());
+                    foreach var data in org_data {
+                        log:printError(data.toString());
+                        map<json>|error child_orgs = data.child_organizations.ensureType();
+                        if (child_orgs is map<json>) {
+                            foreach var child_org in child_orgs {
+                                log:printError(child_org.toString());
                             
+                                map<json>|error vacancies =  child_org.vacancies.ensureType();
+                                if (vacancies is map<json>) {
+                                    foreach var vacancy in vacancies {
+                                        log:printError(vacancy.toString());
+                                    }
+                                    return vacancies.toJson();
+                                } else {
+                                    log:printError("Error vacancies: " + vacancies.toString());
+                                }
+                                
+                            }
+                        
+                        } else {
+                            log:printError("Error child_orgs: " + child_orgs.toString());
                         }
-                    
-                    } else {
-                        log:printError("Error child_orgs: " + child_orgs.toString());
                     }
+                } else {
+                    log:printError("Error org_data: " + org_data.toString());
+                    log:printError(organizations.toString());
                 }
+
              } 
         } else {
             return error("Error: vacancies not found");
