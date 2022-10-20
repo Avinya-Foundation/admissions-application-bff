@@ -51,15 +51,15 @@ service / on new http:Listener(9090) {
                                             string|error  foundation_type =  aviya_type.foundation_type.ensureType();
                                             string|error  focus =aviya_type.focsus.ensureType();
                                             if(global_type is string && foundation_type is string && focus is string) {
-                                                log:printInfo("applicant" + "applicant".equalsIgnoreCaseAscii(global_type).toString());
-                                                log:printInfo("student" + "student".equalsIgnoreCaseAscii(global_type).toString());
+                                                log:printInfo("applicant" + ("applicant" == global_type).toString());
+                                                log:printInfo("student" + ("student" == global_type).toString());
                                                 log:printInfo(focus);
                                             }
                                         }
 
                                         Vacancy vacancy_record = check vacancy.cloneWithType(Vacancy);
-                                        log:printInfo(vacancy_record?.avinya_type?.global_type.toString());
-                                        log:printInfo(vacancy_record?.avinya_type?.foundation_type.toString());
+                                        log:printInfo("vacancy_record?.avinya_type?.global_type " + vacancy_record?.avinya_type?.global_type.toString());
+                                        log:printInfo("vacancy_record?.avinya_type?.foundation_type " + vacancy_record?.avinya_type?.foundation_type.toString());
                                         string foundation_type = vacancy_record?.avinya_type?.global_type?: "";
                                         string global_type = vacancy_record?.avinya_type?.foundation_type?: "";
                                         if(global_type.equalsIgnoreCaseAscii("applicant") && 
