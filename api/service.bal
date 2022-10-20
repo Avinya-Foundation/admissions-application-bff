@@ -58,14 +58,15 @@ service / on new http:Listener(9090) {
                                         }
 
                                         Vacancy vacancy_record = check vacancy.cloneWithType(Vacancy);
-                                        log:printInfo(vacancy_record?.avinya_type?.global_type?: "No global type");
-                                        log:printInfo(vacancy_record?.avinya_type?.foundation_type?: "No foundation type");
-                                        string foundation_type = vacancy_record?.avinya_type?.global_type?: "No global type";
-                                        string global_type = vacancy_record?.avinya_type?.foundation_type?: "No foundation type";
+                                        log:printInfo(vacancy_record?.avinya_type?.global_type.toString());
+                                        log:printInfo(vacancy_record?.avinya_type?.foundation_type.toString());
+                                        string foundation_type = vacancy_record?.avinya_type?.global_type?: "";
+                                        string global_type = vacancy_record?.avinya_type?.foundation_type?: "";
                                         if(global_type.equalsIgnoreCaseAscii("applicant") && 
                                             foundation_type.equalsIgnoreCaseAscii("student")) {
                                             log:printInfo("Student vacancy");
                                         }
+                                        log:printInfo("vacancy_record " + vacancy_record.toString());
                                     }
                                     
                                     return vacancies.toJson();
