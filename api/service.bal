@@ -62,9 +62,9 @@ service / on new http:Listener(9090) {
                                         log:printInfo("vacancy_record?.avinya_type?.foundation_type " + vacancy_record?.avinya_type?.foundation_type.toString());
                                         string foundation_type = vacancy_record?.avinya_type?.global_type?: "";
                                         string global_type = vacancy_record?.avinya_type?.foundation_type?: "";
-                                        if(global_type.equalsIgnoreCaseAscii("applicant") && 
-                                            foundation_type.equalsIgnoreCaseAscii("student")) {
-                                            log:printInfo("Student vacancy");
+                                        if(global_type == "applicant" && 
+                                            foundation_type == "student") {
+                                            log:printInfo("Student vacancy " + vacancy_record?.head_count.toString());
                                         }
                                         log:printInfo("vacancy_record " + vacancy_record.toString());
                                     }
