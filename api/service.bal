@@ -36,19 +36,15 @@ service / on new http:Listener(9090) {
                 json[]|error org_data = organizations.organizations.ensureType();
                 
                 if(org_data is json[]) {
-                    log:printError(org_data.length().toString());
-                    log:printError(org_data.toString());
                     foreach var data in org_data {
-                        log:printError(data.toString());
                         json[]|error child_orgs = data.child_organizations.ensureType();
                         if (child_orgs is json[]) {
                             foreach var child_org in child_orgs {
-                                log:printError(child_org.toString());
                             
                                 json[]|error vacancies =  child_org.vacancies.ensureType();
                                 if (vacancies is json[]) {
                                     foreach var vacancy in vacancies {
-                                        log:printInfo(vacancy.toString());
+                                        log:printInfo("Vacancy " + vacancy.toString());
                                         json|error aviya_type =  vacancy.avinya_type.ensureType();
                                         if !(aviya_type is error) {
                                             string|error global_type = aviya_type.global_type.ensureType();
@@ -62,7 +58,14 @@ service / on new http:Listener(9090) {
                                         }
 
                                         Vacancy vacancy_record = check vacancy.cloneWithType(Vacancy);
-                                        log:printInfo(vacancy_record.toString());
+                                        log:printInfo(vacancy_record?.avinya_type?.global_type?: "No global type");
+                                        log:printInfo(vacancy_record?.avinya_type?.foundation_type?: "No foundation type");
+                                        string foundation_type = vacancy_record?.avinya_type?.global_type?: "No global type";
+                                        string global_type = vacancy_record?.avinya_type?.foundation_type?: "No foundation type";
+                                        if(global_type.equalsIgnoreCaseAscii("applicant") && 
+                                            foundation_type.equalsIgnoreCaseAscii("student")) {
+                                            log:printInfo("Student vacancy");
+                                        }
                                     }
                                     
                                     return vacancies.toJson();
@@ -78,12 +81,11 @@ service / on new http:Listener(9090) {
                     }
                 } else {
                     log:printError("Error org_data: " + org_data.toString());
-                    log:printError(organizations.toString());
                 }
 
              } 
         } else {
-            return error("Error: vacancies not found");
+            return error("Error: student vacancies not found. " + getOrganizationVacanciesResponse.toString());
         }
     }
     
