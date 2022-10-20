@@ -7,6 +7,22 @@
 dependencies-toml-version = "2"
 
 [[package]]
+org = "avinyafoundation"
+name = "admissions_application_bff"
+version = "0.2.0"
+dependencies = [
+	{org = "ballerina", name = "graphql"},
+	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "log"},
+	{org = "ballerina", name = "test"},
+	{org = "ballerinai", name = "observe"}
+]
+modules = [
+	{org = "avinyafoundation", packageName = "admissions_application_bff", moduleName = "admissions_application_bff"}
+]
+
+[[package]]
 org = "ballerina"
 name = "auth"
 version = "2.3.1"
@@ -328,22 +344,6 @@ dependencies = [
 ]
 modules = [
 	{org = "ballerinai", packageName = "observe", moduleName = "observe"}
-]
-
-[[package]]
-org = "samis"
-name = "api"
-version = "0.1.0"
-dependencies = [
-	{org = "ballerina", name = "graphql"},
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "log"},
-	{org = "ballerina", name = "test"},
-	{org = "ballerinai", name = "observe"}
-]
-modules = [
-	{org = "samis", packageName = "api", moduleName = "api"}
 ]
 
 

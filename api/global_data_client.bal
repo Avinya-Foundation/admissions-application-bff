@@ -21,7 +21,7 @@ public isolated client class GlobalDataClient {
     }
 
     remote isolated function getOrganizationVacancies(string name) returns GetOrganizationVacanciesResponse|graphql:ClientError {
-        string query = string `query getOrganizationVacancies($name:String!) {organization_structure(name:$name) {organizations {name {name_en} address {street_address} avinya_type {name active global_type foundation_type focus level} phone child_organizations {name {name_en} vacancies {name description head_count evaluation_criteria {prompt description difficulty evalualtion_type rating_out_of expected_answer}}} parent_organizations {name {name_en}} vacancies {name description head_count}}}}`;
+        string query = string `query getOrganizationVacancies($name:String!) {organization_structure(name:$name) {organizations {name {name_en} address {street_address} avinya_type {name active global_type foundation_type focus level} phone child_organizations {name {name_en} vacancies {name description head_count avinya_type {name active global_type foundation_type focus level} evaluation_criteria {prompt description difficulty evalualtion_type rating_out_of answer_options {answer}}}} parent_organizations {name {name_en}} vacancies {name description head_count}}}}`;
         map<anydata> variables = {"name": name};
         json graphqlResponse = check self.graphqlClient->executeWithType(query, variables,
             headers = {

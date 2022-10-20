@@ -1,7 +1,7 @@
 [package]
-org = "samis"
-name = "api"
-version = "0.1.0"
+org = "avinyafoundation"
+name = "admissions_application_bff"
+version = "0.2.0"
 distribution = "2201.1.1"
 
 [build-options]

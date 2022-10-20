@@ -29,7 +29,7 @@ service / on new http:Listener(9090) {
 
     resource function get student_vacancies/[string name]() returns json|error {
         GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
-        // json var = <json>getOrganizationVacanciesResponse;
+        
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
              map<json> org_structure = check getOrganizationVacanciesResponse.toJson().ensureType();
              foreach var organizations in org_structure {
@@ -48,8 +48,23 @@ service / on new http:Listener(9090) {
                                 json[]|error vacancies =  child_org.vacancies.ensureType();
                                 if (vacancies is json[]) {
                                     foreach var vacancy in vacancies {
-                                        log:printError(vacancy.toString());
+                                        log:printInfo(vacancy.toString());
+                                        json|error aviya_type =  vacancy.avinya_type.ensureType();
+                                        if !(aviya_type is error) {
+                                            string|error global_type = aviya_type.global_type.ensureType();
+                                            string|error  foundation_type =  aviya_type.foundation_type.ensureType();
+                                            string|error  focus =aviya_type.focsus.ensureType();
+                                            if(global_type is string && foundation_type is string && focus is string) {
+                                                log:printInfo("applicant" + "applicant".equalsIgnoreCaseAscii(global_type).toString());
+                                                log:printInfo("student" + "student".equalsIgnoreCaseAscii(global_type).toString());
+                                                log:printInfo(focus);
+                                            }
+                                        }
+
+                                        Vacancy vacancy_record = check vacancy.cloneWithType(Vacancy);
+                                        log:printInfo(vacancy_record.toString());
                                     }
+                                    
                                     return vacancies.toJson();
                                 } else {
                                     log:printError("Error vacancies: " + vacancies.toString());

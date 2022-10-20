@@ -61,6 +61,38 @@ public type Person record {
     string? email?;
 };
 
+public type EvaluationCriteria record {|
+    readonly string? record_type = "evaluation_criteria";
+    int id?;
+    string? prompt;
+    string? description;
+    string? expected_answer;
+    string? evalualtion_type;
+    string? difficulty;
+    int? rating_out_of;
+    EvaluationCriteriaAnswerOption[]? answer_options;
+|};
+
+public type EvaluationCriteriaAnswerOption record {|
+    readonly string? record_type = "evaluation_criteria_answer_option";
+    int id?;
+    int? evaluation_criteria_id;
+    string? answer;
+    boolean? expected_answer;
+|};
+
+public type Vacancy record {|
+    readonly string? record_type = "vacancy";
+    int id?;
+    string? name;
+    string? description;
+    int? organization_id;
+    int? avinya_type_id;
+    int? evaluation_cycle_id;
+    int? head_count;
+    EvaluationCriteria[]? evaluation_criteria;
+|};
+
 public type CreateStudentApplicantResponse record {|
     map<json?> __extensions?;
     record {|
@@ -143,12 +175,22 @@ public type GetOrganizationVacanciesResponse record {|
                     string? description;
                     int? head_count;
                     record {|
+                        string? name;
+                        boolean active;
+                        string global_type;
+                        string? foundation_type;
+                        string? focus;
+                        int? level;
+                    |}? avinya_type;
+                    record {|
                         string? prompt;
                         string? description;
                         string? difficulty;
                         string? evalualtion_type;
                         int? rating_out_of;
-                        string? expected_answer;
+                        record {|
+                            string? answer;
+                        |}[]? answer_options;
                     |}[]? evaluation_criteria;
                 |}[]? vacancies;|}[]? child_organizations;
             record {|record {|
