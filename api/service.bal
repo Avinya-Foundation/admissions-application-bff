@@ -40,13 +40,13 @@ service / on new http:Listener(9090) {
                     log:printError(org_data.toString());
                     foreach var data in org_data {
                         log:printError(data.toString());
-                        map<json>|error child_orgs = data.child_organizations.ensureType();
-                        if (child_orgs is map<json>) {
+                        json[]|error child_orgs = data.child_organizations.ensureType();
+                        if (child_orgs is json[]) {
                             foreach var child_org in child_orgs {
                                 log:printError(child_org.toString());
                             
-                                map<json>|error vacancies =  child_org.vacancies.ensureType();
-                                if (vacancies is map<json>) {
+                                json[]|error vacancies =  child_org.vacancies.ensureType();
+                                if (vacancies is json[]) {
                                     foreach var vacancy in vacancies {
                                         log:printError(vacancy.toString());
                                     }
