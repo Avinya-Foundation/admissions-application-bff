@@ -61,6 +61,16 @@ public type Person record {
     string? email?;
 };
 
+public type AvinyaType record{|
+    int id?;
+    boolean? active?;
+    string? global_type?;
+    string? name?;
+    string? foundation_type?;
+    string? focus?;
+    int? level?;
+|};
+
 public type EvaluationCriteria record {|
     int id?;
     string? prompt?;
@@ -87,6 +97,7 @@ public type Vacancy record {|
     int? avinya_type_id?;
     int? evaluation_cycle_id?;
     int? head_count?;
+    AvinyaType? avinya_type?;
     EvaluationCriteria[]? evaluation_criteria?;
 |};
 
