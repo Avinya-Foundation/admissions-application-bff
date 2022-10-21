@@ -27,7 +27,8 @@ service / on new http:Listener(9090) {
         return getOrganizationVacanciesResponse;
     }
 
-    resource function get student_vacancies/[string name]() returns Vacancy|error {
+    resource function get student_vacancies/[string name]() returns Vacancy[]|error {
+        Vacancy[] vacancy_records = [];
         GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
         
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
@@ -50,7 +51,8 @@ service / on new http:Listener(9090) {
                                         if(global_type.equalsIgnoreCaseAscii("applicant") && 
                                             foundation_type.equalsIgnoreCaseAscii("student")) {
                                             log:printInfo(vacancy_record?.head_count.toString() + "Student vacancies found");
-                                            return vacancy_record; // assume only one student applicants vacancy block for current cycle of admissions 
+                                            vacancy_records.push(vacancy_record);
+                                            return vacancy_records; // assume only one student applicants vacancy block for current cycle of admissions 
                                         }
                                     }
                                 } else {
