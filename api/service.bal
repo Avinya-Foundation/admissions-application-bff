@@ -9,7 +9,7 @@ final GlobalDataClient globalDataClient = check new ("https://3a907137-52a3-4196
 # bound to port `9090`.
 service / on new http:Listener(9090) {
 
-    # A resource for generating greetings
+    # Creates a student applicant Person record
     # + person - the input Person record
     # + return - Student record with associated data
     resource function post student_applicant(@http:Payload Person person) returns CreateStudentApplicantResponse|error {
@@ -22,14 +22,20 @@ service / on new http:Listener(9090) {
         return createStudentApplicantConsentResponse;
     }
 
-    resource function get organization_vacancies/[string name]() returns GetOrganizationVacanciesResponse|error {
-        GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
+    # Get vacancies for a named organization 
+    # + org_name - the name of the organization to get vacancies for
+    # + return - vacancies for the named organization including the sub-org hierarchy
+    resource function get organization_vacancies/[string org_name]() returns GetOrganizationVacanciesResponse|error {
+        GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(org_name);
         return getOrganizationVacanciesResponse;
     }
 
-    resource function get student_vacancies/[string name]() returns Vacancy[]|error {
+    # Get studnet vacancies for a named organization 
+    # + org_name - the name of the organization to get vacancies for
+    # + return - Student vacancies for the named organization
+    resource function get student_vacancies/[string org_name]() returns Vacancy[]|error {
         Vacancy[] vacancy_records = [];
-        GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
+        GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(org_name);
         
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
              map<json> org_structure = check getOrganizationVacanciesResponse.toJson().ensureType();
