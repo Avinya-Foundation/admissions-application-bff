@@ -27,7 +27,7 @@ service / on new http:Listener(9090) {
         return getOrganizationVacanciesResponse;
     }
 
-    resource function get student_vacancies/[string name]() returns json|error {
+    resource function get student_vacancies/[string name]() returns Vacancy|error {
         GetOrganizationVacanciesResponse|graphql:ClientError getOrganizationVacanciesResponse = globalDataClient->getOrganizationVacancies(name);
         
         if(getOrganizationVacanciesResponse is GetOrganizationVacanciesResponse) {
@@ -44,38 +44,19 @@ service / on new http:Listener(9090) {
                                 json[]|error vacancies =  child_org.vacancies.ensureType();
                                 if (vacancies is json[]) {
                                     foreach var vacancy in vacancies {
-                                        log:printInfo("Vacancy " + vacancy.toString());
-                                        json|error aviya_type =  vacancy.avinya_type.ensureType();
-                                        if !(aviya_type is error) {
-                                            string|error global_type = aviya_type.global_type.ensureType();
-                                            string|error  foundation_type =  aviya_type.foundation_type.ensureType();
-                                            string|error  focus =aviya_type.focsus.ensureType();
-                                            if(global_type is string && foundation_type is string && focus is string) {
-                                                log:printInfo("applicant" + ("applicant" == global_type).toString());
-                                                log:printInfo("student" + ("student" == global_type).toString());
-                                                log:printInfo(focus);
-                                            }
-                                        }
-
                                         Vacancy vacancy_record = check vacancy.cloneWithType(Vacancy);
-                                        log:printInfo("vacancy_record?.avinya_type?.global_type " + vacancy_record?.avinya_type?.global_type.toString());
-                                        log:printInfo("vacancy_record?.avinya_type?.foundation_type " + vacancy_record?.avinya_type?.foundation_type.toString());
-                                        string foundation_type = vacancy_record?.avinya_type?.global_type?: "";
-                                        string global_type = vacancy_record?.avinya_type?.foundation_type?: "";
-                                        if(global_type == "applicant" && 
-                                            foundation_type == "student") {
-                                            log:printInfo("Student vacancy " + vacancy_record?.head_count.toString());
+                                        string global_type = vacancy_record?.avinya_type?.global_type?: "";
+                                        string foundation_type = vacancy_record?.avinya_type?.foundation_type?: "";
+                                        if(global_type.equalsIgnoreCaseAscii("applicant") && 
+                                            foundation_type.equalsIgnoreCaseAscii("student")) {
+                                            log:printInfo(vacancy_record?.head_count.toString() + "Student vacancies found");
                                         }
-                                        log:printInfo("vacancy_record " + vacancy_record.toString());
+                                        return vacancy_record;
                                     }
-                                    
-                                    return vacancies.toJson();
                                 } else {
                                     log:printError("Error vacancies: " + vacancies.toString());
                                 }
-                                
                             }
-                        
                         } else {
                             log:printError("Error child_orgs: " + child_orgs.toString());
                         }
@@ -83,11 +64,11 @@ service / on new http:Listener(9090) {
                 } else {
                     log:printError("Error org_data: " + org_data.toString());
                 }
-
              } 
         } else {
             return error("Error: student vacancies not found. " + getOrganizationVacanciesResponse.toString());
         }
+        return error("Error: student vacancies not found.");
     }
     
 }
