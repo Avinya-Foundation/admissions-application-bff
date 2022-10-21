@@ -50,8 +50,8 @@ service / on new http:Listener(9090) {
                                         if(global_type.equalsIgnoreCaseAscii("applicant") && 
                                             foundation_type.equalsIgnoreCaseAscii("student")) {
                                             log:printInfo(vacancy_record?.head_count.toString() + "Student vacancies found");
+                                            return vacancy_record; // assume only one student applicants vacancy block for current cycle of admissions 
                                         }
-                                        return vacancy_record;
                                     }
                                 } else {
                                     log:printError("Error vacancies: " + vacancies.toString());
