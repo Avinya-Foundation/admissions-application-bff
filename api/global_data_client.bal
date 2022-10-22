@@ -37,4 +37,13 @@ public isolated client class GlobalDataClient {
                 "API-Key": global_data_api_key});
         return <CreateStudentApplicantConsentResponse> check performDataBinding(graphqlResponse, CreateStudentApplicantConsentResponse);
     }
+
+    remote isolated function createProspect(Prospect prospect) returns CreateProspectResponse|graphql:ClientError {
+        string query = string `mutation createProspect($prospect:Prospect!) {add_prospect(prospect:$prospect) {name phone email receive_information_consent agree_terms_consent created}}`;
+        map<anydata> variables = {"prospect": prospect};
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables,
+            headers = {
+                "API-Key": global_data_api_key});
+        return <CreateProspectResponse> check performDataBinding(graphqlResponse, CreateProspectResponse);
+    }
 }

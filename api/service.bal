@@ -11,15 +11,28 @@ service / on new http:Listener(9090) {
 
     # Creates a student applicant Person record
     # + person - the input Person record
-    # + return - Student record with associated data
+    # + return - Student record with persisted data
     resource function post student_applicant(@http:Payload Person person) returns CreateStudentApplicantResponse|error {
         CreateStudentApplicantResponse|graphql:ClientError createStudentApplicantResponse = globalDataClient->createStudentApplicant(person);
         return createStudentApplicantResponse;
     }
 
+    # Creates an ApplicantConsent record
+    # Persists the consent record for the given applicant
+    # + applicantConsent - the input ApplicantConsent record
+    # + return - ApplicantConsentData record with persisted data
     resource function post applicant_consent(@http:Payload ApplicantConsent applicantConsent) returns CreateStudentApplicantConsentResponse|error {
         CreateStudentApplicantConsentResponse|graphql:ClientError createStudentApplicantConsentResponse = globalDataClient->createStudentApplicantConsent(applicantConsent);
         return createStudentApplicantConsentResponse;
+    }
+
+    # Creates an Prospect record
+    # Persists the contact and consent information for the given prospect
+    # + prospect - the input Prospect record
+    # + return - ProspectData record with persisted data
+    resource function post prospect(@http:Payload Prospect prospect) returns CreateProspectResponse|error {
+        CreateProspectResponse|graphql:ClientError createProspectResponse = globalDataClient->createProspect(prospect);
+        return createProspectResponse;
     }
 
     # Get vacancies for a named organization 

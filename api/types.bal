@@ -14,6 +14,7 @@ public type ApplicantConsent record {
     string? created?;
     int? avinya_type_id?;
     boolean? agree_terms_consent?;
+    boolean? active?;
     boolean? done_ol?;
     int? application_id?;
     int? ol_year?;
@@ -58,6 +59,18 @@ public type Person record {
     int? id?;
     string? asgardeo_id?;
     string? preferred_name?;
+    string? email?;
+};
+
+public type Prospect record {
+    int? phone?;
+    string? created?;
+    string? name?;
+    boolean? agree_terms_consent?;
+    boolean? active?;
+    int? id?;
+    boolean? receive_information_consent?;
+    string? record_type?;
     string? email?;
 };
 
@@ -210,4 +223,16 @@ public type GetOrganizationVacanciesResponse record {|
                 int? head_count;
             |}[]? vacancies;
         |}[]? organizations;|}? organization_structure;
+|};
+
+public type CreateProspectResponse record {|
+    map<json?> __extensions?;
+    record {|
+        string? name;
+        int? phone;
+        string? email;
+        boolean? receive_information_consent;
+        boolean? agree_terms_consent;
+        string? created;
+    |}? add_prospect;
 |};
