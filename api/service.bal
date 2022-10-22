@@ -38,11 +38,13 @@ service / on new http:Listener(9090) {
                 return prospect_record;
             } else {
                 log:printError("Error while processing Prospect record received", prospect_record);
-                return error("Error while processing Prospect record received: " + prospect_record.message());
+                return error("Error while processing Prospect record received: " + prospect_record.message() + 
+                    ":: Detail: " + prospect_record.detail().toString());
             }
         } else {
             log:printError("Error while creating prospect", createProspectResponse);
-            return error("Error while creating prospect: " + createProspectResponse.message());
+            return error("Error while creating prospect: " + createProspectResponse.message() + 
+                ":: Detail: " + createProspectResponse.detail().toString());
         }
     }
 
