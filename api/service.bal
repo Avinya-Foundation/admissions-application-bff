@@ -29,10 +29,21 @@ service / on new http:Listener(9090) {
     # Creates an Prospect record
     # Persists the contact and consent information for the given prospect
     # + prospect - the input Prospect record
-    # + return - ProspectData record with persisted data
-    resource function post prospect(@http:Payload Prospect prospect) returns CreateProspectResponse|error {
+    # + return - Prospect record returned from create operation with persisted data
+    resource function post prospect(@http:Payload Prospect prospect) returns Prospect|error {
         CreateProspectResponse|graphql:ClientError createProspectResponse = globalDataClient->createProspect(prospect);
-        return createProspectResponse;
+        if(createProspectResponse is CreateProspectResponse) {
+            Prospect|error prospect_record = createProspectResponse.add_prospect.cloneWithType(Prospect);
+            if(prospect_record is Prospect) {
+                return prospect_record;
+            } else {
+                log:printError("Error while processing Prospect record received", prospect_record);
+                return error("Error while processing Prospect record received: " + prospect_record.message());
+            }
+        } else {
+            log:printError("Error while creating prospect", createProspectResponse);
+            return error("Error while creating prospect: " + createProspectResponse.message());
+        }
     }
 
     # Get vacancies for a named organization 
