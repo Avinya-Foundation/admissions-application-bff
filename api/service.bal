@@ -2,7 +2,15 @@ import ballerina/http;
 import ballerina/log;
 import ballerina/graphql;
 
-final GlobalDataClient globalDataClient = check new ("https://3a907137-52a3-4196-9e0d-22d054ea5789-dev.e1-us-east-azure.choreoapis.dev/mhbw/global-data-graphql-api/1.0.0/graphql");
+final GlobalDataClient globalDataClient = check new (GLOBAL_DATA_API_URL, clientConfig =
+     {
+        auth : {
+            tokenUrl: CHOREO_TOKEN_URL,
+            clientId:GLOBAL_DATA_CLIENT_ID,
+            clientSecret:GLOBAL_DATA_CLIENT_SECRET
+        }
+    }
+);
 
 
 # A service representing a network-accessible API
