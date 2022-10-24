@@ -1,6 +1,5 @@
 import ballerina/graphql;
 public configurable string GLOBAL_DATA_API_URL = ?;
-public configurable string GLOBAL_DATA_API_KEY = ?;
 public configurable string CHOREO_TOKEN_URL = ?;
 public configurable string GLOBAL_DATA_CLIENT_ID = ?;
 public configurable string GLOBAL_DATA_CLIENT_SECRET = ?;

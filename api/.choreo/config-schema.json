@@ -8,7 +8,19 @@
         "api": {
           "type": "object",
           "properties": {
-            "global_data_api_key": {
+            "GLOBAL_DATA_API_URL": {
+              "type": "string",
+              "description": ""
+            },
+            "CHOREO_TOKEN_URL": {
+              "type": "string",
+              "description": ""
+            },
+            "GLOBAL_DATA_CLIENT_ID": {
+              "type": "string",
+              "description": ""
+            },
+            "GLOBAL_DATA_CLIENT_SECRET": {
               "type": "string",
               "description": ""
             }
@@ -16,7 +28,10 @@
           },
           "additionalProperties": false,
           "required": [
-            "global_data_api_key"
+            "GLOBAL_DATA_API_URL",
+            "CHOREO_TOKEN_URL",
+            "GLOBAL_DATA_CLIENT_ID",
+            "GLOBAL_DATA_CLIENT_SECRET"
           ]
         }
       },
