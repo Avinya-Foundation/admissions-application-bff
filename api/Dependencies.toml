@@ -9,7 +9,7 @@ dependencies-toml-version = "2"
 [[package]]
 org = "avinyafoundation"
 name = "admissions_application_bff"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
 	{org = "ballerina", name = "graphql"},
 	{org = "ballerina", name = "http"},
