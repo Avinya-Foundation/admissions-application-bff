@@ -204,6 +204,7 @@ public type GetOrganizationVacanciesResponse record {|
                         int? level;
                     |}? avinya_type;
                     record {|
+                        int? id;
                         string? prompt;
                         string? description;
                         string? difficulty;
