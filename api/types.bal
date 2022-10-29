@@ -114,6 +114,28 @@ public type Vacancy record {|
     EvaluationCriteria[]? evaluation_criteria?;
 |};
 
+public type Application record {
+    int? vacancy_id?;
+    string? application_date?;
+    int? id?;
+    string? record_type?;
+    int? person_id?;
+};
+
+public type Evaluation record {
+    int[]? parent_evaluations?;
+    string? notes?;
+    int? evaluatee_id?;
+    int? evaluation_criteria_id?;
+    string? response?;
+    int[]? child_evaluations?;
+    int? evaluator_id?;
+    int? grade?;
+    int? id?;
+    string? updated?;
+    string? record_type?;
+};
+
 public type CreateStudentApplicantResponse record {|
     map<json?> __extensions?;
     record {|
@@ -236,4 +258,22 @@ public type CreateProspectResponse record {|
         boolean? agree_terms_consent;
         string? created;
     |}? add_prospect;
+|};
+
+public type CreateStudentApplicationResponse record {|
+    map<json?> __extensions?;
+    record {|record {|
+            string? status;
+        |}[]? statuses;|}? add_application;
+|};
+
+public type GetApplicationResponse record {|
+    map<json?> __extensions?;
+    record {|
+        string? application_date;
+        record {|
+            string? status;
+            string? updated;
+        |}[]? statuses;
+    |}? application;
 |};

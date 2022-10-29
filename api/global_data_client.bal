@@ -38,4 +38,18 @@ public isolated client class GlobalDataClient {
         json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
         return <CreateProspectResponse> check performDataBinding(graphqlResponse, CreateProspectResponse);
     }
+
+    remote isolated function createStudentApplication(Application application) returns CreateStudentApplicationResponse|graphql:ClientError {
+        string query = string `mutation createStudentApplication($application:Application!) {add_application(application:$application) {statuses {status}}}`;
+        map<anydata> variables = {"application": application};
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
+        return <CreateStudentApplicationResponse> check performDataBinding(graphqlResponse, CreateStudentApplicationResponse);
+    }
+    
+    remote isolated function getApplication(int person_id) returns GetApplicationResponse|graphql:ClientError {
+        string query = string `query getApplication($person_id:Int!) {applicantion(person_id:$person_id) {application_date statuses {status updated}}}`;
+        map<anydata> variables = {"person_id": person_id};
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
+        return <GetApplicationResponse> check performDataBinding(graphqlResponse, GetApplicationResponse);
+    }
 }
