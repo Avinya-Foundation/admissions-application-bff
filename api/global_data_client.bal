@@ -1,5 +1,6 @@
 import ballerina/http;
 import ballerina/graphql;
+import ballerina/log;
 
 public isolated client class GlobalDataClient {
     final graphql:Client graphqlClient;
@@ -37,5 +38,31 @@ public isolated client class GlobalDataClient {
         map<anydata> variables = {"prospect": prospect};
         json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
         return <CreateProspectResponse> check performDataBinding(graphqlResponse, CreateProspectResponse);
+    }
+
+    remote isolated function createStudentApplication(Application application) returns CreateStudentApplicationResponse|graphql:ClientError {
+        string query = string `mutation createStudentApplication($application:Application!) {add_application(application:$application) {statuses {status}}}`;
+        map<anydata> variables = {"application": application};
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
+        return <CreateStudentApplicationResponse> check performDataBinding(graphqlResponse, CreateStudentApplicationResponse);
+    }
+
+    remote isolated function getApplication(int person_id) returns GetApplicationResponse|graphql:ClientError {
+        string query = string `query getApplication($person_id:Int!) {applicantion(person_id:$person_id) {application_date statuses {status updated}}}`;
+        map<anydata> variables = {"person_id": person_id};
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
+        return <GetApplicationResponse> check performDataBinding(graphqlResponse, GetApplicationResponse);
+    }
+
+    remote isolated function createEvaluations(Evaluation[] evaluations) returns json|graphql:ClientError {
+        string query = string `mutation createEvaluations($evaluations: [Evaluation!]!)
+                                {
+                                    add_evaluations(evaluations:$evaluations) 
+                                        
+                                }`;
+        map<anydata> variables = {"evaluations": evaluations};
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
+        log:printInfo("Response: " + graphqlResponse.toString());
+        return graphqlResponse;
     }
 }

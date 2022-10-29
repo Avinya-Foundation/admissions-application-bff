@@ -56,6 +56,42 @@ service / on new http:Listener(9090) {
         }
     }
 
+    resource function post application (@http:Payload Application application) returns Application|error {
+        CreateStudentApplicationResponse|graphql:ClientError createApplicationResponse = globalDataClient->createStudentApplication(application);
+        if(createApplicationResponse is CreateStudentApplicationResponse) {
+            Application|error application_record = createApplicationResponse.add_application.cloneWithType(Application);
+            if(application_record is Application) {
+                return application_record;
+            } else {
+                log:printError("Error while processing Application record received", application_record);
+                return error("Error while processing Application record received: " + application_record.message() + 
+                    ":: Detail: " + application_record.detail().toString());
+            }
+        } else {
+            log:printError("Error while creating application", createApplicationResponse);
+            return error("Error while creating application: " + createApplicationResponse.message() + 
+                ":: Detail: " + createApplicationResponse.detail().toString());
+        }
+    }
+
+    resource function get application(int applicationId) returns Application|error {
+        GetApplicationResponse|graphql:ClientError getApplicationResponse = globalDataClient->getApplication(applicationId);
+        if(getApplicationResponse is GetApplicationResponse) {
+            Application|error application_record = getApplicationResponse.application.cloneWithType(Application);
+            if(application_record is Application) {
+                return application_record;
+            } else {
+                log:printError("Error while processing Application record received", application_record);
+                return error("Error while processing Application record received: " + application_record.message() + 
+                    ":: Detail: " + application_record.detail().toString());
+            }
+        } else {
+            log:printError("Error while getting application", getApplicationResponse);
+            return error("Error while getting application: " + getApplicationResponse.message() + 
+                ":: Detail: " + getApplicationResponse.detail().toString());
+        }
+    }
+
     # Get vacancies for a named organization 
     # + org_name - the name of the organization to get vacancies for
     # + return - vacancies for the named organization including the sub-org hierarchy
