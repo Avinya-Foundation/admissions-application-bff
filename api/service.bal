@@ -74,6 +74,27 @@ service / on new http:Listener(9090) {
         }
     }
 
+    resource function post evaluations (@http:Payload Evaluation[] evaluations) returns json|error {
+        json|graphql:ClientError createEvaluationResponse = globalDataClient->createEvaluations(evaluations);
+        if(createEvaluationResponse is json) {
+            log:printInfo("Evaluations created successfully: " + createEvaluationResponse.toString());
+            return createEvaluationResponse;
+            // json|error evaluation_record = createEvaluationResponse.add_application_evaluation.cloneWithType(json);
+            // if(evaluation_record is json) {
+            //     return evaluation_record;
+            // } else {
+            //     log:printError("Error while processing Evaluation record received", evaluation_record);
+            //     return error("Error while processing Evaluation record received: " + evaluation_record.message() + 
+            //         ":: Detail: " + evaluation_record.detail().toString());
+            // }
+        } else {
+            log:printError("Error while creating evaluation", createEvaluationResponse);
+            return error("Error while creating evaluation: " + createEvaluationResponse.message() + 
+                ":: Detail: " + createEvaluationResponse.detail().toString());
+        }
+        
+    }
+
     # Get application details for a given person 
     # + person_id - the ID of the person who submitted the application 
     # + return - application details for the given person
