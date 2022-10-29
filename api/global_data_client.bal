@@ -48,7 +48,7 @@ public isolated client class GlobalDataClient {
     }
 
     remote isolated function getApplication(int person_id) returns GetApplicationResponse|graphql:ClientError {
-        string query = string `query getApplication($person_id:Int!) {applicantion(person_id:$person_id) {application_date statuses {status updated}}}`;
+        string query = string `query getApplication($person_id:Int!) {applicaion(person_id:$person_id) {application_date statuses {status updated}}}`;
         map<anydata> variables = {"person_id": person_id};
         json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
         return <GetApplicationResponse> check performDataBinding(graphqlResponse, GetApplicationResponse);
