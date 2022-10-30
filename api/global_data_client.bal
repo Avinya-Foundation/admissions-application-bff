@@ -11,6 +11,17 @@ public isolated client class GlobalDataClient {
         return;
     }
 
+    remote isolated function createAddress(Address address) returns CreateAddressResponse|graphql:ClientError {
+        string query = string ` mutation createAddress($address: Address!)
+                                {add_address(address:$address){
+                                    id
+                                }}`;
+        map<anydata> variables = {"address": address};
+        
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
+        return <CreateAddressResponse> check performDataBinding(graphqlResponse, CreateAddressResponse);
+    }
+
     remote isolated function createStudentApplicant(Person person) returns CreateStudentApplicantResponse|graphql:ClientError {
         string query = string `mutation createStudentApplicant($person:Person!) {add_student_applicant(person:$person) {id asgardeo_id preferred_name full_name sex organization {name {name_en}} phone email permanent_address {street_address city {name {name_en}} phone} mailing_address {street_address city {name {name_en}} phone} notes date_of_birth avinya_type {name active global_type foundation_type focus level} passport_no nic_no id_no}}`;
         map<anydata> variables = {"person": person};

@@ -88,6 +88,24 @@ service / on new http:Listener(9090) {
         }
     }
 
+    resource function post address (@http:Payload Address address) returns Address|error {
+        CreateAddressResponse|graphql:ClientError createAddressResponse = globalDataClient->createAddress(address);
+        if(createAddressResponse is CreateAddressResponse) {
+            Address|error address_record = createAddressResponse.add_address.cloneWithType(Address);
+            if(address_record is Address) {
+                return address_record;
+            } else {
+                log:printError("Error while processing Application record received", address_record);
+                return error("Error while processing Application record received: " + address_record.message() + 
+                    ":: Detail: " + address_record.detail().toString());
+            }
+        } else {
+            log:printError("Error while creating application", createAddressResponse);
+            return error("Error while creating application: " + createAddressResponse.message() + 
+                ":: Detail: " + createAddressResponse.detail().toString());
+        }
+    }
+
     resource function post evaluations (@http:Payload Evaluation[] evaluations) returns json|error {
         json|graphql:ClientError createEvaluationResponse = globalDataClient->createEvaluations(evaluations);
         if(createEvaluationResponse is json) {
