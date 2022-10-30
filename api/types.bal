@@ -119,10 +119,10 @@ public type Vacancy record {|
 public type ApplicationStatus record{|
     readonly string? record_type = "application_status";
     int id?;
-    int? application_id;
-    string? status;
-    string? updated;
-    boolean? is_terminal;
+    int? application_id?;
+    string? status?;
+    string? updated?;
+    boolean? is_terminal?;
 |};
 
 public type Application record {
