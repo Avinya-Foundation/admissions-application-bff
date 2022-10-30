@@ -290,3 +290,10 @@ public type GetApplicationResponse record {|
         |}[]? statuses;
     |}? application;
 |};
+
+public type CreateAddressResponse record {|
+    map<json?> __extensions?;
+    record {|
+        int? id;
+    |}? add_address;
+|};
