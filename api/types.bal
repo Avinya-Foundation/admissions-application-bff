@@ -60,6 +60,8 @@ public type Person record {
     string? asgardeo_id?;
     string? preferred_name?;
     string? email?;
+    Address? permanent_address?;
+    Address? mailing_address?;
 };
 
 public type Prospect record {
