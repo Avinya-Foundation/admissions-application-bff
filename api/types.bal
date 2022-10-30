@@ -116,12 +116,22 @@ public type Vacancy record {|
     EvaluationCriteria[]? evaluation_criteria?;
 |};
 
+public type ApplicationStatus record{|
+    readonly string? record_type = "application_status";
+    int id?;
+    int? application_id;
+    string? status;
+    string? updated;
+    boolean? is_terminal;
+|};
+
 public type Application record {
     int? vacancy_id?;
     string? application_date?;
     int? id?;
     string? record_type?;
     int? person_id?;
+    ApplicationStatus[]? statuses?;
 };
 
 public type Evaluation record {
