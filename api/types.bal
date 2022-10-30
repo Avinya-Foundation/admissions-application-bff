@@ -141,6 +141,7 @@ public type Evaluation record {
 public type CreateStudentApplicantResponse record {|
     map<json?> __extensions?;
     record {|
+        int? id?;
         string? asgardeo_id;
         string? preferred_name;
         string? full_name;

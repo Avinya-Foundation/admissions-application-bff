@@ -20,9 +20,23 @@ service / on new http:Listener(9090) {
     # Creates a student applicant Person record
     # + person - the input Person record
     # + return - Student record with persisted data
-    resource function post student_applicant(@http:Payload Person person) returns CreateStudentApplicantResponse|error {
+    resource function post student_applicant(@http:Payload Person person) returns Person|error {
         CreateStudentApplicantResponse|graphql:ClientError createStudentApplicantResponse = globalDataClient->createStudentApplicant(person);
-        return createStudentApplicantResponse;
+
+        if(createStudentApplicantResponse is CreateStudentApplicantResponse) {
+            Person|error person_record = createStudentApplicantResponse.add_student_applicant.cloneWithType(Person);
+            if(person_record is Person) {
+                return person_record;
+            } else {
+                log:printError("Error while processing Prospect record received", person_record);
+                return error("Error while processing Prospect record received: " + person_record.message() + 
+                    ":: Detail: " + person_record.detail().toString());
+            }
+        } else {
+            log:printError("Error while creating prospect", createStudentApplicantResponse);
+            return error("Error while creating prospect: " + createStudentApplicantResponse.message() + 
+                ":: Detail: " + createStudentApplicantResponse.detail().toString());
+        }
     }
 
     # Creates an ApplicantConsent record
