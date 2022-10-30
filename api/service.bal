@@ -112,7 +112,7 @@ service / on new http:Listener(9090) {
     # Get application details for a given person 
     # + person_id - the ID of the person who submitted the application 
     # + return - application details for the given person
-    resource function get application(int person_id) returns Application|error {
+    resource function get application/[int person_id]() returns Application|error {
         GetApplicationResponse|graphql:ClientError getApplicationResponse = globalDataClient->getApplication(person_id);
         if(getApplicationResponse is GetApplicationResponse) {
             Application|error application_record = getApplicationResponse.application.cloneWithType(Application);
