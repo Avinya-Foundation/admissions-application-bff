@@ -58,6 +58,8 @@ public type Person record {
     int? organization_id?;
     int? id?;
     string? asgardeo_id?;
+    string? jwt_sub_id;
+    string? jwt_email;
     string? preferred_name?;
     string? email?;
     Address? permanent_address?;
