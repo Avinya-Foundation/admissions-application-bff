@@ -153,6 +153,8 @@ public type CreateStudentApplicantResponse record {|
     record {|
         int? id?;
         string? asgardeo_id;
+        string? jwt_sub_id?;
+        string? jwt_email?;
         string? preferred_name;
         string? full_name;
         string? sex;
