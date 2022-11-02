@@ -76,4 +76,11 @@ public isolated client class GlobalDataClient {
         log:printInfo("Response: " + graphqlResponse.toString());
         return graphqlResponse;
     }
+
+    remote isolated function getStudentApplicant(string jwt_sub_id) returns GetStudentApplicantResponse|graphql:ClientError {
+        string query = string `query getStudentApplicant($jwt_sub_id:String!) {student_applicant(jwt_sub_id:$jwt_sub_id) {asgardeo_id full_name preferred_name email phone jwt_sub_id jwt_email}}`;
+        map<anydata> variables = {"jwt_sub_id": jwt_sub_id};
+        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
+        return <GetStudentApplicantResponse> check performDataBinding(graphqlResponse, GetStudentApplicantResponse);
+    }
 }

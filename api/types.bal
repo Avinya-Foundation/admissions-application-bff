@@ -299,3 +299,16 @@ public type CreateAddressResponse record {|
         int? id;
     |}? add_address;
 |};
+
+public type GetStudentApplicantResponse record {|
+    map<json?> __extensions?;
+    record {|
+        string? asgardeo_id;
+        string? full_name;
+        string? preferred_name;
+        string? email;
+        int? phone;
+        string? jwt_sub_id;
+        string? jwt_email;
+    |}? student_applicant;
+|};

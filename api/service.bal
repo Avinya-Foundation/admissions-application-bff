@@ -204,5 +204,27 @@ service / on new http:Listener(9090) {
         }
         return error("Error: student vacancies not found.");
     }
+
+    # Get person details for a given JWT subject(user) id. This method is to be used 
+    # fo r mapping the logged in user to the person record in the system.
+    # + jwt_sub_id - the subjecct (user) ID as per the JWT token 
+    # + return - person details corresponding to the given JWT subject(user) id
+    resource function get student_applicant/[string jwt_sub_id]() returns Person|error {
+        GetStudentApplicantResponse|graphql:ClientError getStudentApplicantResponse = globalDataClient->getStudentApplicant(jwt_sub_id);
+        if(getStudentApplicantResponse is GetStudentApplicantResponse) {
+            Person|error person_record = getStudentApplicantResponse.student_applicant.cloneWithType(Person);
+            if(person_record is Application) {
+                return person_record;
+            } else {
+                log:printError("Error while processing Application record received", person_record);
+                return error("Error while processing Application record received: " + person_record.message() + 
+                    ":: Detail: " + person_record.detail().toString());
+            }
+        } else {
+            log:printError("Error while getting application", getStudentApplicantResponse);
+            return error("Error while getting application: " + getStudentApplicantResponse.message() + 
+                ":: Detail: " + getStudentApplicantResponse.detail().toString());
+        }
+    }
     
 }
