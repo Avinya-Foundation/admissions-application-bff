@@ -305,6 +305,7 @@ public type CreateAddressResponse record {|
 public type GetStudentApplicantResponse record {|
     map<json?> __extensions?;
     record {|
+        int? id;
         string? asgardeo_id;
         string? full_name;
         string? preferred_name;
