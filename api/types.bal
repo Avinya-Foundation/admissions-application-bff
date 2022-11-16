@@ -76,6 +76,11 @@ public type Prospect record {
     boolean? receive_information_consent?;
     string? record_type?;
     string? email?;
+    string? street_address?;
+    string? date_of_birth?;
+    boolean? done_ol?;
+    int? ol_year?;
+    int? distance_to_school?;
 };
 
 public type AvinyaType record{|
@@ -274,6 +279,11 @@ public type CreateProspectResponse record {|
         boolean? receive_information_consent;
         boolean? agree_terms_consent;
         string? created;
+        string? street_address;
+        string? date_of_birth;
+        boolean? done_ol;
+        int? ol_year;
+        int? distance_to_school;
     |}? add_prospect;
 |};
 
