@@ -45,7 +45,7 @@ public isolated client class GlobalDataClient {
     }
 
     remote isolated function createProspect(Prospect prospect) returns CreateProspectResponse|graphql:ClientError {
-        string query = string `mutation createProspect($prospect:Prospect!) {add_prospect(prospect:$prospect) {name phone email receive_information_consent agree_terms_consent created}}`;
+        string query = string `mutation createProspect($prospect:Prospect!) {add_prospect(prospect:$prospect) {name phone email receive_information_consent agree_terms_consent created street_address date_of_birth done_ol ol_year distance_to_school}}`;
         map<anydata> variables = {"prospect": prospect};
         json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
         return <CreateProspectResponse> check performDataBinding(graphqlResponse, CreateProspectResponse);
