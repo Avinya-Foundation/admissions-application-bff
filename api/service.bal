@@ -2,6 +2,10 @@ import ballerina/http;
 import ballerina/log;
 import ballerina/graphql;
 
+@display {
+    label: "Global Data Client",
+    id: "global-data"
+}
 final GlobalDataClient globalDataClient = check new (GLOBAL_DATA_API_URL, clientConfig =
      {
         auth : {
@@ -15,6 +19,10 @@ final GlobalDataClient globalDataClient = check new (GLOBAL_DATA_API_URL, client
 
 # A service representing a network-accessible API
 # bound to port `9090`.
+@display {
+    label: "Admissions BFF API",
+    id: "admissions-bff"
+}
 service / on new http:Listener(9090) {
 
     # Creates a student applicant Person record
