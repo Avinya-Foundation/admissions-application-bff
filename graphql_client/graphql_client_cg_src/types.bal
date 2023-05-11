@@ -353,18 +353,16 @@ public type Supply record {
     int? person_id?;
 };
 
-
-public type Vacancy record {|
-    int id?;
-    string? name?;
-    string? description?;
+public type Vacancy record {
     int? organization_id?;
+    string? name?;
     int? avinya_type_id?;
+    string? description?;
     int? evaluation_cycle_id?;
     int? head_count?;
-    AvinyaType? avinya_type?;
-    EvaluationCriteria[]? evaluation_criteria?;
-|};
+    int? id?;
+    string? record_type?;
+};
 
 public type WorkExperience record {
     string? end_date?;

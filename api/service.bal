@@ -2,14 +2,22 @@ import ballerina/http;
 import ballerina/log;
 import ballerina/graphql;
 
-final GlobalDataClient globalDataClient = check new (GLOBAL_DATA_API_URL, clientConfig =
-     {
-        auth : {
+public function initClientConfig() returns ConnectionConfig{
+    ConnectionConfig _clientConig = {};
+    if (GLOBAL_DATA_USE_AUTH) {
+        _clientConig.oauth2ClientCredentialsGrantConfig =  {
             tokenUrl: CHOREO_TOKEN_URL,
             clientId:GLOBAL_DATA_CLIENT_ID,
             clientSecret:GLOBAL_DATA_CLIENT_SECRET
-        }
+        };
+    } else { 
+        _clientConig = {};
     }
+    return _clientConig;
+}
+
+final GraphqlClient globalDataClient = check new (GLOBAL_DATA_API_URL,
+    config = initClientConfig()
 );
 
 
@@ -88,23 +96,23 @@ service / on new http:Listener(9090) {
         }
     }
 
-    resource function post address (@http:Payload Address address) returns Address|error {
-        CreateAddressResponse|graphql:ClientError createAddressResponse = globalDataClient->createAddress(address);
-        if(createAddressResponse is CreateAddressResponse) {
-            Address|error address_record = createAddressResponse.add_address.cloneWithType(Address);
-            if(address_record is Address) {
-                return address_record;
-            } else {
-                log:printError("Error while processing Application record received", address_record);
-                return error("Error while processing Application record received: " + address_record.message() + 
-                    ":: Detail: " + address_record.detail().toString());
-            }
-        } else {
-            log:printError("Error while creating application", createAddressResponse);
-            return error("Error while creating application: " + createAddressResponse.message() + 
-                ":: Detail: " + createAddressResponse.detail().toString());
-        }
-    }
+    // resource function post address (@http:Payload Address address) returns Address|error {
+    //     CreateAddressResponse|graphql:ClientError createAddressResponse = globalDataClient->createAddress(address);
+    //     if(createAddressResponse is CreateAddressResponse) {
+    //         Address|error address_record = createAddressResponse.add_address.cloneWithType(Address);
+    //         if(address_record is Address) {
+    //             return address_record;
+    //         } else {
+    //             log:printError("Error while processing Application record received", address_record);
+    //             return error("Error while processing Application record received: " + address_record.message() + 
+    //                 ":: Detail: " + address_record.detail().toString());
+    //         }
+    //     } else {
+    //         log:printError("Error while creating application", createAddressResponse);
+    //         return error("Error while creating application: " + createAddressResponse.message() + 
+    //             ":: Detail: " + createAddressResponse.detail().toString());
+    //     }
+    // }
 
     resource function post evaluations (@http:Payload Evaluation[] evaluations) returns json|error {
         json|graphql:ClientError createEvaluationResponse = globalDataClient->createEvaluations(evaluations);

@@ -1,5 +1,4 @@
 import ballerina/graphql;
-import ballerina/log;
 
 public isolated client class GraphqlClient {
     final graphql:Client graphqlClient;
@@ -69,17 +68,5 @@ public isolated client class GraphqlClient {
         map<anydata> variables = {"jwt_sub_id": jwt_sub_id};
         json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
         return <GetStudentApplicantResponse> check performDataBinding(graphqlResponse, GetStudentApplicantResponse);
-    }
-
-    remote isolated function createEvaluations(Evaluation[] evaluations) returns json|graphql:ClientError {
-        string query = string `mutation createEvaluations($evaluations: [Evaluation!]!)
-                                {
-                                    add_evaluations(evaluations:$evaluations) 
-                                        
-                                }`;
-        map<anydata> variables = {"evaluations": evaluations};
-        json graphqlResponse = check self.graphqlClient->executeWithType(query, variables);
-        log:printInfo("Response: " + graphqlResponse.toString());
-        return graphqlResponse;
     }
 }
